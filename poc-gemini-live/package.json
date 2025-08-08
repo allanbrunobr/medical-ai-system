@@ -7,8 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "proxy": "node cors-proxy.cjs",
-    "dev-with-proxy": "concurrently \"npm run proxy\" \"npm run dev\""
+    "proxy": "node scripts/cors-proxy.cjs",
+    "dev-with-proxy": "concurrently \"npm run proxy\" \"npm run dev\"",
+    "test": "echo \"No tests specified yet\"",
+    "lint": "echo \"No linter configured yet\"",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@google/genai": "^0.9.0",
