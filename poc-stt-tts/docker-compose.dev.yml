@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # Frontend - Next.js STT-TTS (Desenvolvimento)
+  frontend:
+    build:
+      context: ./stt-tts
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+    volumes:
+      - ./stt-tts:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+    networks:
+      - stt-tts-network
+    command: ["npm", "run", "dev"]
+
+  # Backend - Gemini Live Server (Desenvolvimento)
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - stt-tts-network
+    command: ["node", "gemini-live-google-cloud.js"]
+
+networks:
+  stt-tts-network:
+    driver: bridge 

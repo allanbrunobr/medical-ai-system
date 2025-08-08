@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # Frontend - Next.js STT-TTS
+  frontend:
+    build:
+      context: ./stt-tts
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_LANGFUSE_PUBLIC_KEY=pk-lf-6a22bbc4-8093-4bc8-8cf7-5070ee80d57e
+      - NEXT_PUBLIC_LANGFUSE_SECRET_KEY=sk-lf-1a27f540-f81f-4c86-be08-d529d9875727
+      - LANGFUSE_SECRET_KEY=sk-lf-1a27f540-f81f-4c86-be08-d529d9875727
+      - LANGFUSE_BASE_URL=https://cloud.langfuse.com
+      - GOOGLE_GENERATIVE_AI_API_KEY=AIzaSyBwnoEr6oNq7yjgvR97ZcqRuvYoC0uW8A4
+      - GOOGLE_AI_KEY=AIzaSyBwnoEr6oNq7yjgvR97ZcqRuvYoC0uW8A4
+      - NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY=AIzaSyBwnoEr6oNq7yjgvR97ZcqRuvYoC0uW8A4
+      - NEXT_PUBLIC_GOOGLE_AI_KEY=AIzaSyBwnoEr6oNq7yjgvR97ZcqRuvYoC0uW8A4
+      - GEMINI_MODEL_LIVE=gemini-2.0-flash-thinking-exp
+      - GEMINI_MODEL_MEDICAL=gemini-2.0-flash-lite
+      - GOOGLE_CLOUD_PROJECT_ID=
+      - GOOGLE_CLOUD_KEY_FILE=
+      - ELASTICSEARCH_URL=https://3d6ee28c63cb47b8b8ee7ca0e3a82897.us-central1.gcp.cloud.es.io:443
+      - ELASTICSEARCH_API_KEY=aTlGR0FaZ0IzenpOYnZndmVwdWE6YThHNmZ4Zi1JOWRNcGtVZDNsM2pNZw==
+      - NEXT_PUBLIC_ELASTICSEARCH_URL=https://3d6ee28c63cb47b8b8ee7ca0e3a82897.us-central1.gcp.cloud.es.io:443
+      - NEXT_PUBLIC_ELASTICSEARCH_API_KEY=aTlGR0FaZ0IzenpOYnZndmVwdWE6YThHNmZ4Zi1JOWRNcGtVZDNsM2pNZw==
+      - PUBMED_API_KEY=8b033115f3bf540df9a36689de4ad31b0808
+      - NEXT_PUBLIC_PUBMED_API_KEY=8b033115f3bf540df9a36689de4ad31b0808
+      - PUBMED_TOOL_NAME=gemini-live-doctor
+      - PUBMED_EMAIL=allanbruno@gmail.com
+    volumes:
+      - ./stt-tts:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - stt-tts-network
+
+  # Backend - Gemini Live Server
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - LANGFUSE_PUBLIC_KEY=pk-lf-6a22bbc4-8093-4bc8-8cf7-5070ee80d57e
+      - LANGFUSE_SECRET_KEY=sk-lf-1a27f540-f81f-4c86-be08-d529d9875727
+      - LANGFUSE_BASE_URL=https://cloud.langfuse.com
+      - GOOGLE_GENERATIVE_AI_API_KEY=AIzaSyBwnoEr6oNq7yjgvR97ZcqRuvYoC0uW8A4
+      - GOOGLE_AI_KEY=AIzaSyBwnoEr6oNq7yjgvR97ZcqRuvYoC0uW8A4
+      - GEMINI_MODEL_LIVE=gemini-2.0-flash-thinking-exp
+      - GEMINI_MODEL_MEDICAL=gemini-2.0-flash-lite
+      - GOOGLE_CLOUD_PROJECT_ID=
+      - GOOGLE_CLOUD_KEY_FILE=
+      - ELASTICSEARCH_URL=https://3d6ee28c63cb47b8b8ee7ca0e3a82897.us-central1.gcp.cloud.es.io:443
+      - ELASTICSEARCH_API_KEY=aTlGR0FaZ0IzenpOYnZndmVwdWE6YThHNmZ4Zi1JOWRNcGtVZDNsM2pNZw==
+      - PUBMED_API_KEY=8b033115f3bf540df9a36689de4ad31b0808
+      - PUBMED_TOOL_NAME=gemini-live-doctor
+      - PUBMED_EMAIL=allanbruno@gmail.com
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - stt-tts-network
+
+networks:
+  stt-tts-network:
+    driver: bridge 

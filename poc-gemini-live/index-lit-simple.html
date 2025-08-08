@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Live Doctor - Lit Simplificado</title>
+</head>
+<body>
+    <gdm-live-audio-simple></gdm-live-audio-simple>
+    
+    <script type="module" src="/index-simple.tsx"></script>
+    
+    <script type="module">
+        // Adicionar função global para teste
+        window.testLangfuseGlobal = async function() {
+            const element = document.querySelector('gdm-live-audio-simple');
+            if (element) {
+                await element.testLangfuse();
+            }
+        };
+        
+        console.log('🧪 Componente Lit Simplificado carregado!');
+        console.log('📝 Use: testLangfuseGlobal() no console');
+    </script>
+</body>
+</html> 

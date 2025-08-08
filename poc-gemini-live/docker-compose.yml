@@ -1,0 +1,66 @@
+services:
+  # Frontend - Gemini Live Doctor
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      - GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY}
+      - GOOGLE_AI_KEY=${GOOGLE_AI_KEY}
+      - GEMINI_MODEL_LIVE=${GEMINI_MODEL_LIVE}
+      - GEMINI_MODEL_MEDICAL=${GEMINI_MODEL_MEDICAL}
+      - GOOGLE_CLOUD_PROJECT_ID=${GOOGLE_CLOUD_PROJECT_ID}
+      - GOOGLE_CLOUD_KEY_FILE=${GOOGLE_CLOUD_KEY_FILE}
+      - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
+      - ELASTICSEARCH_API_KEY=${ELASTICSEARCH_API_KEY}
+      - PUBMED_API_KEY=${PUBMED_API_KEY}
+      - PUBMED_TOOL_NAME=${PUBMED_TOOL_NAME}
+      - PUBMED_EMAIL=${PUBMED_EMAIL}
+      - VITE_LANGFUSE_PUBLIC_KEY=${VITE_LANGFUSE_PUBLIC_KEY}
+      - VITE_LANGFUSE_SECRET_KEY=${VITE_LANGFUSE_SECRET_KEY}
+      - VITE_LANGFUSE_BASE_URL=${VITE_LANGFUSE_BASE_URL}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - proxy
+    networks:
+      - gemini-live-network
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+
+  # CORS Proxy for Elasticsearch
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY}
+      - GOOGLE_AI_KEY=${GOOGLE_AI_KEY}
+      - GEMINI_MODEL_LIVE=${GEMINI_MODEL_LIVE}
+      - GEMINI_MODEL_MEDICAL=${GEMINI_MODEL_MEDICAL}
+      - GOOGLE_CLOUD_PROJECT_ID=${GOOGLE_CLOUD_PROJECT_ID}
+      - GOOGLE_CLOUD_KEY_FILE=${GOOGLE_CLOUD_KEY_FILE}
+      - ELASTICSEARCH_URL=${ELASTICSEARCH_URL}
+      - ELASTICSEARCH_API_KEY=${ELASTICSEARCH_API_KEY}
+      - PUBMED_API_KEY=${PUBMED_API_KEY}
+      - PUBMED_TOOL_NAME=${PUBMED_TOOL_NAME}
+      - PUBMED_EMAIL=${PUBMED_EMAIL}
+      - VITE_LANGFUSE_PUBLIC_KEY=${VITE_LANGFUSE_PUBLIC_KEY}
+      - VITE_LANGFUSE_SECRET_KEY=${VITE_LANGFUSE_SECRET_KEY}
+      - VITE_LANGFUSE_BASE_URL=${VITE_LANGFUSE_BASE_URL}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - gemini-live-network
+    command: ["node", "cors-proxy.cjs"]
+
+networks:
+  gemini-live-network:
+    driver: bridge 

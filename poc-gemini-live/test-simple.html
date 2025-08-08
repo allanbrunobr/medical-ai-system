@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples - Gemini Live</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .test-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .test-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste Simples - Gemini Live Doctor</h1>
+        <p>Esta é uma página de teste para verificar se o problema é com o Langfuse</p>
+        
+        <div class="status" id="status">
+            Status: Carregando...
+        </div>
+        
+        <button class="test-button" onclick="testLangfuse()">
+            🧪 Testar Langfuse
+        </button>
+        
+        <button class="test-button" onclick="testBasic()">
+            🔧 Teste Básico
+        </button>
+        
+        <div id="result" style="margin-top: 20px; text-align: left;"></div>
+    </div>
+
+    <script type="module">
+        // Teste básico
+        window.testBasic = function() {
+            document.getElementById('status').innerHTML = '✅ Teste básico funcionando!';
+            document.getElementById('result').innerHTML = '<p>✅ JavaScript funcionando</p><p>✅ DOM funcionando</p><p>✅ Eventos funcionando</p>';
+        };
+
+        // Teste do Langfuse
+        window.testLangfuse = async function() {
+            try {
+                document.getElementById('status').innerHTML = '🔄 Testando Langfuse...';
+                
+                // Tentar importar o Langfuse
+                const { langfuse } = await import('./langfuse-config.ts');
+                
+                if (langfuse) {
+                    document.getElementById('status').innerHTML = '✅ Langfuse carregado com sucesso!';
+                    document.getElementById('result').innerHTML = '<p>✅ Langfuse configurado</p><p>✅ Traces funcionando</p>';
+                } else {
+                    document.getElementById('status').innerHTML = '⚠️ Langfuse não inicializado';
+                    document.getElementById('result').innerHTML = '<p>⚠️ Langfuse não disponível</p>';
+                }
+            } catch (error) {
+                document.getElementById('status').innerHTML = '❌ Erro no Langfuse';
+                document.getElementById('result').innerHTML = `<p>❌ Erro: ${error.message}</p>`;
+                console.error('Erro no Langfuse:', error);
+            }
+        };
+
+        // Inicializar
+        document.getElementById('status').innerHTML = '✅ Página carregada com sucesso!';
+    </script>
+</body>
+</html> 
