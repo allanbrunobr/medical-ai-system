@@ -117,6 +117,9 @@ secrets/
 keys/
 *.key
 *.pem
+service-account.json
+*.json.key
+credentials.json
 
 # Backup files
 *.bak

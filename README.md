@@ -43,6 +43,10 @@ cp poc-gemini-live/env.example poc-gemini-live/.env
 # Para poc-stt-tts
 cp poc-stt-tts/.env.example poc-stt-tts/.env
 # Edite o arquivo .env com suas chaves
+
+# Para Google Cloud (se necessário)
+cp poc-stt-tts/server/service-account.example.json poc-stt-tts/server/service-account.json
+# Edite o arquivo service-account.json com suas credenciais do Google Cloud
 ```
 
 3. **Execute os sistemas:**
